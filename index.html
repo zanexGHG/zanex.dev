@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./zanex/img/webicon.png">
+    <link rel="stylesheet" href="./zanex/css/button.css">
+    <script>
+        title = "zanex.solutions                \n";
+        position = 0;
+
+        function scrolltitle() {
+            document.title = title.substring(position, title.length) + title.substring(0, position);
+            position++;
+            if (position > title.length) position = 0;
+            titleScroll = window.setTimeout(scrolltitle, 170);
+        }
+        scrolltitle();
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
+    <style>
+        body {
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>zanex.solutions</h1>
+    <div class="buttons-container">
+        <a href="./zanex/links/github.html" class="button github"><i class="fa-brands fa-github"></i></a>
+        <a href="./zanex/links/youtube.html" class="button youtube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="./zanex/links/discord.html" class="button discord"><i class="fa-brands fa-discord"></i></a>
+        <a href="./zanex/links/reddit.html" class="button reddit"><i class="fa-brands fa-reddit"></i></a>
+        <a href="./zanex/links/buymeacoffee.html" class="button buymeacoffee"><i class="fa-solid fa-mug-hot"></i></a>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tsparticles@2.3.4/tsparticles.bundle.min.js"></script>
+    <script src="./zanex/js/background.js"></script>
+</body>
+
+</html>

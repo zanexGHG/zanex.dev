@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title id="message">Redirecting to youtube</title>
+  <script>
+    let dots = "";
+    let count = 0;
+    let intervalId = setInterval(() => {
+      if (count > 2) {
+        count = 0;
+        dots = "";
+      } else {
+        count++;
+        dots += ".";
+      }
+      document.getElementById("message").innerHTML = "Redirecting" + dots;
+    }, 500);
+  </script>
+</head>
+<body>
+<script>
+  window.onload = function() {
+    window.location.href = "https://www.youtube.com/@zanexGHG";
+  }
+</script>
+</body>
+</html>
