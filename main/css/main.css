@@ -1,0 +1,19 @@
+.window {
+    width: 200px;
+    height: 200px;
+    background-color: #f1f1f1;
+    transform: translate3d(0,0,0);
+}
+
+.header {
+    width: 200px;
+    height: 50px;
+    background-color: #999;
+    text-align: center;
+    line-height: 50px;
+    cursor: move;
+}
+
+.content {
+    padding: 10px;
+}
