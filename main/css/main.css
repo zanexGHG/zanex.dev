@@ -40,31 +40,34 @@ body::before {
 }
 
 #window-bar-close {
-    color: #FB5B6B;
-    font-size: 30px;
-    height: 0px;
+    background-color: #FB5B6B;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
 }
 #window-bar-close:hover {
-    color: #C64956;
+    background-color: #C64956;
 }
 
 #window-bar-minimize {
-    color: #F5C329;
-    font-size: 30px;
-    height: 0px;
+    background-color: #F5C329;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
 }
 #window-bar-minimize:hover {
-    color: #C19920;
+    background-color: #C19920;
 }
 
 #window-bar-maximize {
-    color: #26C93E;
-    font-size: 30px;
-    height: 0px;
+    background-color: #26C93E;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
 }
 
 #window-bar-maximize:hover {
-    color: #1C9630;
+    background-color: #1C9630;
 }
 
 #links {
