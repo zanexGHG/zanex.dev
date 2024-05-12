@@ -1,9 +1,11 @@
 import { createWebHashHistory, createRouter } from "vue-router";
 import { createApp } from 'vue'
 import App from './App.vue'
+import './style/default-styles.scss';
 import HomePage from "@/pages/HomePage.vue";
 import ProjectsPage from "@/pages/ProjectsPage.vue";
 import ContactPage from "@/pages/ContactPage.vue";
+import NamePage from "@/pages/NamePage.vue";
 
 const pages = [
     { id: 1, name: 'Home', slug: '/', isLoaded: false },
@@ -14,7 +16,8 @@ const pages = [
 const routes = [
     { path: '/', component: HomePage, name: 'Home' },
     { path: '/projects', component: ProjectsPage, name: 'Projects' },
-    { path: '/contact', component: ContactPage, name: 'Contact' }
+    { path: '/contact', component: ContactPage, name: 'Contact' },
+    { path: '/name', component: NamePage, name: 'Name' },
 ];
 
 const router = createRouter({

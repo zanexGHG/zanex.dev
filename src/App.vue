@@ -5,7 +5,7 @@
   <div v-else class="fade">
     <div class="content">
       <div class="navbar-wrapper">
-         <div class="navbar">
+        <div class="navbar">
           <router-link v-for="page in pages" :key="page.id" :to="page.slug" class="navbar-item" active-class="active">{{ page.name }}</router-link>
         </div>
       </div>
@@ -18,6 +18,8 @@
 import { defineComponent, ref, onMounted } from "vue";
 import LoadingComponent from "@/components/LoadingComponent.vue";
 
+let initialLoad = true;
+
 export default defineComponent({
   name: "App",
   inject: ['pages'],
@@ -26,9 +28,14 @@ export default defineComponent({
     const isLoading = ref(true);
 
     onMounted(() => {
-      setTimeout(() => {
+      if (initialLoad) {
+        setTimeout(() => {
+          isLoading.value = false;
+          initialLoad = false;
+        }, 1400);
+      } else {
         isLoading.value = false;
-      }, 1400);
+      }
     });
 
     return { isLoading };
@@ -46,12 +53,12 @@ body::before {
   height: 100%;
   background: url("assets/img/background.png") no-repeat;
   background-size: cover;
-  filter: blur(0.08vh);
+  filter: blur(0.08vh) brightness(0.8) contrast(1.2) saturate(1.2);
   z-index: -1;
 }
 
 body {
-  background-color: rgba(0, 0, 0, 1);
+  background-color: rgba(25, 25, 25);
   font-family: 'JetBrains Mono', sans-serif;
   color: #fff;
   margin: 0;
@@ -118,7 +125,7 @@ body {
 .content {
   display: flex;
   justify-content: center;
-  margin-top: 80px;
+  margin-top: 100px;
 }
 
 .fade {
