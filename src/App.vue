@@ -5,7 +5,7 @@
   <div v-else class="fade">
     <div class="content">
       <div class="navbar-wrapper">
-        <div class="navbar">
+        <div class="navbar" :class="{ scrolled: scrolled }">
           <router-link v-for="page in pages" :key="page.id" :to="page.slug" class="navbar-item" active-class="active">{{ page.name }}</router-link>
         </div>
       </div>
@@ -24,6 +24,11 @@ export default defineComponent({
   name: "App",
   inject: ['pages'],
   components: { LoadingComponent },
+  data() {
+    return {
+      scrolled: false,
+    };
+  },
   setup() {
     const isLoading = ref(true);
 
@@ -39,11 +44,27 @@ export default defineComponent({
     });
 
     return { isLoading };
+  },
+  methods: {
+    handleScroll() {
+      this.scrolled = window.scrollY > 0;
+    },
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
   }
 });
 </script>
 
 <style>
+div {
+  animation: fade-in 0.5s;
+  animation-fill-mode: forwards;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -73,6 +94,7 @@ body {
   height: 100px;
   width: 100%;
   top: 0;
+  z-index: 99;
 }
 
 .navbar {
@@ -80,6 +102,12 @@ body {
   padding: 15px;
   border-radius: 25px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+  background-color: rgba(25, 25, 25, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
+  background-color: rgba(25, 25, 25, 0.8);
 }
 
 .navbar-item {
@@ -125,7 +153,9 @@ body {
 .content {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 100px;
+  flex-direction: column;
 }
 
 .fade {
