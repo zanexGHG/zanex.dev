@@ -1,47 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ----------------- -->
-    <!-- Meta tags for SEO -->
-    <!-- ----------------- -->
-    <title>zanex.dev - Home</title>
-    <meta charset="UTF-8">
-    <meta name="description" content="Hello! Im zanex and this is my website where you can find a little bit of information about me :D">
-    <meta name="author" content="zanex">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zanex.dev</title>
+  <meta name="description" content="A fullstack developer who spends way too much time inside...">
+  <meta name="author" content="zanex.dev">
+  <meta name="tags" content="zanex, zanex.dev, fullstack, developer, web, software, engineer, programming, coding, linux, vuejs, html, css, javascript, php, java, cpp, mariadb">
+  <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --primary-color: #8a5cf7;
+      --accent-color: #ffffff;
+      --background-color: #0a0318;
+      --window-bg: rgba(12, 6, 20, 0.95);
+    }
 
-    <!-- --------------------------------------- -->
-    <!-- Open Graph meta tags for social sharing -->
-    <!-- --------------------------------------- -->
-    <meta property="og:title" content="zanex.dev - Home">
-    <meta property="og:description" content="Hello! Im zanex and this is my website where you can find a little bit of information about me :D">
-    <meta property="og:image" content="assets/logo.png">
-    <meta property="og:url" content="https://zanex.dev/">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-    <!-- ------- -->
-    <!-- Favicon -->
-    <!-- ------- -->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    body {
+      animation: fadeIn 1.5s ease-out forwards;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-    <!-- ----------------------- -->
-    <!-- JSON-LD structured data -->
-    <!-- ----------------------- -->
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "url": "https://zanex.dev/",
-            "name": "zanex.dev",
-            "description": "Hello! Im zanex and this is my website where you can find a little bit of information about me :D",
-            "author": {
-                "@type": "Person",
-                "name": "zanex"
-            }
-        }
-    </script>
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.60) 100%);
+    }
+
+    .nature-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: url('./assets/background.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.3;
+      mix-blend-mode: soft-light;
+    }
+
+    .snowflakes {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .snowflake {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: white;
+      border-radius: 50%;
+      filter: blur(1px);
+      opacity: 0.8;
+      animation-name: snowfall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-delay: 0s !important; /* Ensure no delay on initial load */
+    }
+
+    .window {
+      background: var(--window-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 30px rgba(138, 92, 247, 0.2);
+      border-radius: 8px;
+      width: 600px;
+      max-width: 90%;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+      cursor: move;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: scale(0.9);
+      animation: popIn 0.8s ease-out forwards;
+      animation-delay: 0.7s;
+    }
+
+    .window-content {
+      padding: 30px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--accent-color);
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(138, 92, 247, 0.5);
+      border-bottom: 1px solid rgba(138, 92, 247, 0.3);
+      padding-bottom: 10px;
+    }
+
+    p, span {
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 16px;
+    }
+
+    .stack--wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+
+    .stack--wrapper img {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .stack--wrapper img:hover {
+      transform: translateY(-3px);
+      background-color: rgba(138, 92, 247, 0.2);
+      box-shadow: 0 0 15px rgba(138, 92, 247, 0.3);
+      cursor: pointer;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .social-link {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: rgba(12, 6, 20, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .social-link:hover {
+      transform: translateY(-3px);
+      background: var(--primary-color);
+      box-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .social-link svg {
+      width: 22px;
+      height: 22px;
+      fill: white;
+    }
+
+    .highlight {
+      position: absolute;
+      top: 0;
+      left: -250px;
+      width: 100px;
+      height: 100%;
+      background: linear-gradient(
+              90deg,
+              rgba(255, 255, 255, 0) 0%,
+              rgba(255, 255, 255, 0.05) 50%,
+              rgba(255, 255, 255, 0) 100%
+      );
+      animation: highlight-animation 5s linear infinite;
+    }
+
+    .heading {
+      color: white;
+    }
+
+    @keyframes snowfall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(calc(100vh + 200px)) rotate(360deg);
+      }
+    }
+
+    @keyframes highlight-animation {
+      0% {
+        left: -250px;
+      }
+      100% {
+        left: 750px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        background-color: #000000;
+      }
+      to {
+        background-color: var(--background-color);
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
 </head>
 <body>
-<div id="app"></div>
-<script type="module" src="src/main.js"></script>
+<div class="background"></div>
+<div class="nature-bg"></div>
+<div class="snowflakes" id="snowflakes"></div>
+
+<div class="window" id="draggable-window">
+  <div class="window-content">
+    <h1>zanex.dev</h1>
+    <span>Hey, I'm a fullstack developer who spends way too much time inside...</span>
+    <br>
+    <span>My current stack:</span>
+    <div class="stack--wrapper">
+      <img src="./assets/linux.svg" width="35px" height="35px" alt="Linux" />
+      <img src="./assets/vue.svg" width="35px" height="35px" alt="VueJS" />
+      <img src="./assets/html.svg" width="35px" height="35px" alt="HTML" />
+      <img src="./assets/css.svg" width="35px" height="35px" alt="CSS" />
+      <img src="./assets/js.svg" width="35px" height="35px" alt="JavaScript" />
+      <img src="./assets/php.svg" width="35px" height="35px" alt="PHP" />
+      <img src="./assets/java.svg" width="35px" height="35px" alt="Java" />
+      <img src="./assets/cpp.svg" width="35px" height="35px" alt="CPP" />
+      <img src="./assets/mariadb.svg" width="35px" height="35px" alt="MariaDB" />
+    </div>
+    <div class="social-links">
+      <a href="https://github.com/zanexGHG" target="_blank" class="social-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+      </a>
+      <a href="https://discord.com/users/885990444129984592" target="_blank" class="social-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3864-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+        </svg>
+      </a>
+      <a href="https://cactusmod.xyz/" target="_blank" class="social-link">
+        <img src="./assets/cactusmod.png" width="22px" height="22px" alt="CactusMod" />
+      </a>
+    </div>
+  </div>
+  <div class="highlight"></div>
+</div>
+
+<script>
+  function createSnowflakes() {
+    const snowflakesContainer = document.getElementById('snowflakes');
+    const numberOfSnowflakes = 50;
+
+    for (let i = 0; i < numberOfSnowflakes; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.className = 'snowflake';
+
+      const size = Math.random() * 4 + 2;
+      snowflake.style.width = `${size}px`;
+      snowflake.style.height = `${size}px`;
+
+      const left = Math.random() * 100;
+      const startingY = Math.random() * window.innerHeight;
+      snowflake.style.left = `${left}%`;
+      snowflake.style.top = `${startingY}px`;
+
+      const opacity = Math.random() * 0.7 + 0.3;
+      snowflake.style.opacity = opacity;
+
+      const duration = Math.random() * 10 + 5;
+      snowflake.style.animationDuration = `${duration}s`;
+
+      snowflake.style.animationDelay = '0s';
+
+      snowflakesContainer.appendChild(snowflake);
+    }
+  }
+
+  const windowElement = document.getElementById('draggable-window');
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  windowElement.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - windowElement.getBoundingClientRect().left;
+    offsetY = e.clientY - windowElement.getBoundingClientRect().top;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      windowElement.style.left = `${e.clientX - offsetX}px`;
+      windowElement.style.top = `${e.clientY - offsetY}px`;
+      windowElement.style.position = 'absolute';
+    }
+  });
+
+  window.addEventListener('load', createSnowflakes);
+</script>
 </body>
 </html>
