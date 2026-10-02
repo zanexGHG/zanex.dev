@@ -1,2 +1,4 @@
 # zanex.dev
-This is the repository of my own Website. If I have more time I will create an actually dynamic Website based on a simple MVC system written from scratch. (In PHP ofc)
+This is the source code for [zanex.dev](https://zanex.dev), my personal website.
+It's built in plain HTML, CSS and JavaScript, with no frameworks or build tools.
+The only dependencies I use are lu

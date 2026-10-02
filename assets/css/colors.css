@@ -1,0 +1,17 @@
+:root {
+    --ink: #f1ecff;
+    --muted: #aaa4b8;
+    --dim: #767080;
+    --violet: #cbbcff;
+    --line: rgba(203, 188, 255, .10);
+    --edge: rgba(203, 188, 255, .16);
+    --ease: cubic-bezier(.22, .68, .3, 1);
+    --ease-hover: ease-in-out;
+    --hover-ms: 130ms;
+    --accent: var(--violet);
+    --accent-line: rgba(203, 188, 255, .6);
+    --accent-bg: rgba(203, 188, 255, .18);
+    --footer-gap: 14px;
+    --footer-space: calc(var(--footer-gap) * 2 + 16px);
+    --card-top: 20px;
+}
