@@ -59,22 +59,16 @@ function measureRunes(sample) {
         return;
     }
 
-    const probe = document.createElement('span');
-    probe.style.cssText = 'position:absolute;left:-9999px;visibility:hidden;white-space:pre;font:inherit';
-    sample.appendChild(probe);
+    const style = getComputedStyle(sample);
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
 
-    const widthOf = (g) => {
-        probe.textContent = g;
-        return probe.getBoundingClientRect().width;
-    };
-
-    const unit = widthOf('0') || 1;
-    for (const g of RUNES) {
-        glyphScale.set(g, Math.min(1, unit / (widthOf(g) || unit)));
+    const unit = ctx.measureText('0').width || 1;
+    for (const glyph of RUNES) {
+        glyphScale.set(glyph, Math.min(1, unit / (ctx.measureText(glyph).width || unit)));
     }
-
-    probe.remove();
 }
+
 
 function reelFace(text, scale) {
     const span = document.createElement('span');

@@ -1,7 +1,7 @@
 export const PROJECTS = [
     {
         repo: 'zanexGHG/tripwire',
-        logo: 'https://raw.githubusercontent.com/zanexGHG/tripwire/HEAD/assets/logo.png'
+        logo: './assets/icons/tripwire.webp'
     },
     {repo: 'zanexGHG/AreaResetter'},
     {
@@ -48,10 +48,10 @@ export const STACK = [
     {
         group: 'systems',
         items: [
-            {label: 'Linux', icon: './assets/icons/linux.svg'},
+            {label: 'Linux', icon: './assets/icons/linux.webp'},
             {
                 label: 'TempleOS',
-                icon: './assets/icons/templeos.png',
+                icon: './assets/icons/templeos.webp',
                 sound: './assets/doctory_why_dont_you_study_an_ant.wav'
             }
         ]
@@ -63,7 +63,7 @@ export const LINKS = [
     [
         {label: 'YouTube', href: 'https://www.youtube.com/@zanexGHG', icon: './assets/icons/sites/youtube.png'},
         {label: 'Reddit', href: 'https://www.reddit.com/user/zanexGHG/', icon: './assets/icons/sites/reddit.png'},
-        {label: 'Buy Me a Coffee', href: 'https://buymeacoffee.com/zanexghg', icon: './assets/icons/sites/buymeacoffee.ico'}
+        {label: 'Buy Me a Coffee', href: 'https://buymeacoffee.com/zanexghg', icon: './assets/icons/sites/buymeacoffee.webp'}
     ],
     [
         {label: 'cactusmod', href: 'https://cactusmod.xyz', icon: './assets/icons/sites/cactusmod.png'},

@@ -25,7 +25,7 @@ body {
 }
 
 .no-rain body, body.no-rain {
-    background: #0b0813 url("../background.jpg") center / cover no-repeat
+    background: #0b0813 url("../background.webp") center / cover no-repeat
 }
 
 .vignette {
@@ -924,6 +924,75 @@ section {
 
     .footer {
         margin-top: 20px
+    }
+}
+
+body.no-drag .card {
+    touch-action: auto;
+    user-select: auto
+}
+
+@media (max-width: 760px) {
+    html, body {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto
+    }
+
+    body {
+        padding: 16px 13px 0
+    }
+
+    .card {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: auto;
+        max-width: 620px;
+        height: auto;
+        max-height: none;
+        margin: 0 auto;
+        padding: 24px 20px 20px;
+        overflow: visible;
+        transform: none;
+        transition: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: linear-gradient(145deg, rgba(24, 18, 35, .9), rgba(10, 8, 15, .86))
+    }
+
+    .card.expanded {
+        top: auto;
+        left: auto;
+        width: auto;
+        height: auto;
+        max-height: none;
+        transform: none
+    }
+
+    #projects,
+    #projects.has-open {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+        mask-image: none;
+        -webkit-mask-image: none
+    }
+
+    .card.expanded .projects-section,
+    .card.expanded #projects {
+        flex: none
+    }
+
+    .readme-inner {
+        overflow: visible
+    }
+
+    .site-footer {
+        position: relative;
+        margin: 18px 0 16px;
+        animation: none
     }
 }
 

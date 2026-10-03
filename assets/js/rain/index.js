@@ -1,6 +1,7 @@
 import {RainRenderer, RENDER} from './renderer.js';
 
-const WALLPAPER = './assets/background.jpg';
+const WALLPAPER = './assets/background.webp';
+const HAS_FINE_POINTER = matchMedia('(pointer: fine)').matches;
 
 function enableDragging(card) {
     if (!card) {
@@ -76,7 +77,15 @@ function fail(message) {
 }
 
 async function boot() {
-    enableDragging(document.getElementById('card'));
+    const draggable = HAS_FINE_POINTER && innerWidth > 760;
+
+    if (draggable) {
+        enableDragging(document.getElementById('card'));
+    } else {
+        document.body.classList.add('no-drag');
+        RENDER.fps = 24;
+        RENDER.maxPixels = 1.1e6;
+    }
 
     const canvas = document.getElementById('gl');
     if (!canvas) {
