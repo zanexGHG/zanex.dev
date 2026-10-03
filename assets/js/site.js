@@ -270,6 +270,71 @@ function inline(target, text) {
     }
 }
 
+const TABLE_RULE = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/;
+
+function tableCells(line) {
+    return line
+        .replace(/^\s*\|/, '')
+        .replace(/\|\s*$/, '')
+        .split(/(?<!\\)\|/)
+        .map((cell) => cell.replace(/\\\|/g, '|').trim());
+}
+
+function columnAligns(rule) {
+    return tableCells(rule).map((spec) => {
+        if (/^:-+:$/.test(spec)) {
+            return 'center';
+        }
+
+        if (/^-+:$/.test(spec)) {
+            return 'right';
+        }
+
+        return '';
+    });
+}
+
+function buildTable(lines, start) {
+    const aligns = columnAligns(lines[start + 1]);
+    const table = document.createElement('table');
+
+    const head = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    tableCells(lines[start]).forEach((text, i) => {
+        const th = document.createElement('th');
+        if (aligns[i]) {
+            th.style.textAlign = aligns[i];
+        }
+
+        inline(th, text);
+        headRow.appendChild(th);
+    });
+    head.appendChild(headRow);
+    table.appendChild(head);
+
+    const body = document.createElement('tbody');
+    let i = start + 2;
+    for (; i < lines.length && lines[i].includes('|') && lines[i].trim(); i++) {
+        const row = document.createElement('tr');
+        tableCells(lines[i]).forEach((text, col) => {
+            const td = document.createElement('td');
+            if (aligns[col]) {
+                td.style.textAlign = aligns[col];
+            }
+
+            inline(td, text);
+            row.appendChild(td);
+        });
+        body.appendChild(row);
+    }
+
+    table.appendChild(body);
+
+    const wrap = el('div', 'readme-table');
+    wrap.appendChild(table);
+    return {node: wrap, next: i - 1};
+}
+
 function renderMarkdown(md, base) {
     const root = document.createElement('div');
     const lines = md
@@ -299,6 +364,14 @@ function renderMarkdown(md, base) {
 
         if (!line.trim()) {
             flush();
+            continue;
+        }
+
+        if (line.includes('|') && i + 1 < lines.length && TABLE_RULE.test(lines[i + 1])) {
+            flush();
+            const table = buildTable(lines, i);
+            root.appendChild(table.node);
+            i = table.next;
             continue;
         }
 
