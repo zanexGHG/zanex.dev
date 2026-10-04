@@ -46,6 +46,14 @@ vec3 blurScene(vec2 uv, vec2 refr, float blurAmt) {
     vec2 px = 1.0 / uRes;
     float s = mix(1.5, 28.0, clamp(blurAmt / 4.0, 0.0, 1.0));
     vec3 c = vec3(0.0);
+#ifdef LOW_QUALITY
+    c += bg(uv + refr) * 0.36;
+    c += bg(uv + refr + vec2( s, 0.0) * px) * 0.16;
+    c += bg(uv + refr + vec2(-s, 0.0) * px) * 0.16;
+    c += bg(uv + refr + vec2(0.0,  s) * px) * 0.16;
+    c += bg(uv + refr + vec2(0.0, -s) * px) * 0.16;
+    return c;
+#else
     c += bg(uv + refr) * 0.18;
     c += bg(uv + refr + vec2( s, 0.0) * px) * 0.10;
     c += bg(uv + refr + vec2(-s, 0.0) * px) * 0.10;
@@ -60,8 +68,26 @@ vec3 blurScene(vec2 uv, vec2 refr, float blurAmt) {
     c += bg(uv + refr + vec2(0.0,  1.7*s) * px) * 0.035;
     c += bg(uv + refr + vec2(0.0, -1.7*s) * px) * 0.035;
     return c;
+#endif
 }
 
+#ifdef LOW_QUALITY
+float lqHash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+}
+
+vec4 os2NoiseWithDerivatives_ImproveXY(vec3 X) {
+    vec2 i = floor(X.xy);
+    vec2 f = fract(X.xy);
+    vec2 w = f * f * (3.0 - 2.0 * f);
+    float a = lqHash(i);
+    float b = lqHash(i + vec2(1.0, 0.0));
+    float c = lqHash(i + vec2(0.0, 1.0));
+    float d = lqHash(i + vec2(1.0, 1.0));
+    float n = mix(mix(a, b, w.x), mix(c, d, w.x), w.y) * 2.0 - 1.0;
+    return vec4(0.0, 0.0, 0.0, n);
+}
+#else
 vec4 permute(vec4 t) {
     return t * (t * 34.0 + 133.0);
 }
@@ -117,6 +143,7 @@ vec4 os2NoiseWithDerivatives_ImproveXY(vec3 X) {
     vec4 result = os2NoiseWithDerivativesPart(X);
     return vec4(result.xyz * orthonormalMap, result.w);
 }
+#endif
 
 float GradientWave(float b, float t) {
     return smoothstep(0., b, t) * smoothstep(1., b, t);
@@ -330,12 +357,14 @@ void main() {
 
     vec3 glass = blurScene(uv, refraction, Blur) * EdgeColorScale;
 
+#ifndef LOW_QUALITY
     if (RaindropHeight > 0.0) {
         float ca = 0.0012 * smoothstep(0.0, 0.2, length(RaindropNormal)) / aspect.x;
         glass.r = blurScene(uv, refraction + vec2(ca, 0.0), Blur).r * EdgeColorScale;
         glass.b = blurScene(uv, refraction - vec2(ca, 0.0), Blur).b * EdgeColorScale;
         glass = mix(glass, glass * vec3(0.99, 1.0, 1.03), 0.10);
     }
+#endif
 
     fragColor = vec4(glass * uDim, 1.0);
 }

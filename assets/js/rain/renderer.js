@@ -12,6 +12,18 @@ export const RENDER = {
     dim: 0.92
 };
 
+const SOFTWARE_GPU = /swiftshader|llvmpipe|softpipe|soft\s*pipe|basic\s*render|software\s*rasteriz|microsoft basic display/i;
+
+export function isSoftwareRenderer(gl) {
+    const info = gl.getExtension('WEBGL_debug_renderer_info');
+    if (!info) {
+        return false;
+    }
+
+    const name = gl.getParameter(info.UNMASKED_RENDERER_WEBGL) || '';
+    return SOFTWARE_GPU.test(String(name));
+}
+
 async function loadShader(name) {
     const res = await fetch(SHADERS + name);
     if (!res.ok) {
@@ -19,6 +31,18 @@ async function loadShader(name) {
     }
 
     return res.text();
+}
+
+function withDefines(src, defines) {
+    if (!defines.length) {
+        return src;
+    }
+
+    const lines = src.split('\n');
+    const at = lines[0].startsWith('#version') ? 1 : 0;
+    lines.splice(at, 0, ...defines.map((d) => `#define ${d}`));
+
+    return lines.join('\n');
 }
 
 function compile(gl, type, src, name) {
@@ -55,21 +79,48 @@ export class RainRenderer {
         }
 
         this.ready = false;
+        this.lowQuality = false;
+        this.needsResize = true;
+        this.onResize = () => {
+            this.needsResize = true;
+        };
+
+        addEventListener('resize', this.onResize, {passive: true});
     }
 
     async init(imageUrl) {
         const gl = this.gl;
-        const [vertSrc, fragSrc] = await Promise.all([
+        [this.vertSrc, this.fragSrc] = await Promise.all([
             loadShader('fullscreen.vert'),
             loadShader('rain.frag')
         ]);
 
+        this.buildProgram();
+
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, QUAD, gl.STATIC_DRAW);
+        this.bindQuad();
+
+        await this.loadWallpaper(imageUrl);
+        gl.uniform1i(this.U.uBg, 0);
+        this.ready = true;
+    }
+
+    buildProgram() {
+        const gl = this.gl;
+        const defines = this.lowQuality ? ['LOW_QUALITY'] : [];
+
         const program = gl.createProgram();
-        gl.attachShader(program, compile(gl, gl.VERTEX_SHADER, vertSrc, 'fullscreen.vert'));
-        gl.attachShader(program, compile(gl, gl.FRAGMENT_SHADER, fragSrc, 'rain.frag'));
+        gl.attachShader(program, compile(gl, gl.VERTEX_SHADER, withDefines(this.vertSrc, defines), 'fullscreen.vert'));
+        gl.attachShader(program, compile(gl, gl.FRAGMENT_SHADER, withDefines(this.fragSrc, defines), 'rain.frag'));
         gl.linkProgram(program);
         if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
             throw new Error(gl.getProgramInfoLog(program));
+        }
+
+        if (this.program) {
+            gl.deleteProgram(this.program);
         }
 
         gl.useProgram(program);
@@ -79,18 +130,38 @@ export class RainRenderer {
         for (const name of UNIFORMS) {
             this.U[name] = gl.getUniformLocation(program, name);
         }
+    }
 
-        const buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, QUAD, gl.STATIC_DRAW);
-
-        const aPos = gl.getAttribLocation(program, 'aPos');
+    bindQuad() {
+        const gl = this.gl;
+        const aPos = gl.getAttribLocation(this.program, 'aPos');
         gl.enableVertexAttribArray(aPos);
         gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+    }
 
-        await this.loadWallpaper(imageUrl);
-        gl.uniform1i(this.U.uBg, 0);
-        this.ready = true;
+    // Swaps in the cheap shader variant (fewer blur taps, cheap noise, no chromatic aberration). Returns false when nothing changed.
+    setLowQuality(low) {
+        if (this.lowQuality === low || !this.vertSrc) {
+            return false;
+        }
+
+        this.lowQuality = low;
+        this.buildProgram();
+        this.bindQuad();
+        this.gl.uniform1i(this.U.uBg, 0);
+        this.needsResize = true;
+
+        return true;
+    }
+
+    destroy() {
+        removeEventListener('resize', this.onResize);
+        this.ready = false;
+
+        const lose = this.gl.getExtension('WEBGL_lose_context');
+        if (lose) {
+            lose.loseContext();
+        }
     }
 
     loadWallpaper(url) {
@@ -143,15 +214,21 @@ export class RainRenderer {
         }
 
         this.gl.viewport(0, 0, width, height);
+        this.cssW = innerWidth;
+        this.cssH = innerHeight;
     }
 
     draw(seconds) {
         if (!this.ready) return;
         const gl = this.gl;
-        this.resize();
+
+        if (this.needsResize) {
+            this.needsResize = false;
+            this.resize();
+        }
 
         gl.uniform2f(this.U.uRes, this.canvas.width, this.canvas.height);
-        gl.uniform2f(this.U.uResCss, innerWidth, innerHeight);
+        gl.uniform2f(this.U.uResCss, this.cssW, this.cssH);
         gl.uniform1f(this.U.uTime, seconds);
         gl.uniform2f(this.U.uTexSize, this.texW, this.texH);
         gl.uniform1f(this.U.uImageAR, this.imageAR);

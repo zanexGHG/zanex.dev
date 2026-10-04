@@ -7,12 +7,13 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-    background: #000
+    background: #0b0813
 }
 
 body {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     color: var(--ink);
+    background: #0b0813 url("../background.webp") center / cover no-repeat;
 }
 
 #gl {
@@ -22,10 +23,6 @@ body {
     height: 100%;
     display: block;
     z-index: 0;
-}
-
-.no-rain body, body.no-rain {
-    background: #0b0813 url("../background.webp") center / cover no-repeat
 }
 
 .vignette {
