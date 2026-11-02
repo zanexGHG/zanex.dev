@@ -1008,3 +1008,9 @@ body.no-drag .card {
         animation: none
     }
 }
+
+@media (max-width: 250px) {
+    html {
+        display: none;
+    }
+}

@@ -1,0 +1,57 @@
+<a class="zx" href="https://zanex.dev">
+  <span>zanex.dev</span>
+</a>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+
+    .zx {
+        width: 88px;
+        height: 31px;
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        text-decoration: none;
+        background: url("./assets/perlin.gif") center / cover;
+        border: 1px solid #c0a8ff;
+        box-shadow: inset 0 0 0 1px #413c55;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .zx span {
+        font: 10px/1 Silkscreen, monospace;
+        letter-spacing: -1px;
+        white-space: nowrap;
+        background: linear-gradient(
+                90deg,
+                #c8b4ff 0%,
+                #c8b4ff 30%,
+                #736482 50%,
+                #c8b4ff 70%,
+                #c8b4ff 100%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: thinking-shimmer 2.8s linear infinite;
+    }
+
+    .zx:hover {
+        scale: 1.05;
+    }
+
+    @keyframes thinking-shimmer {
+        from {
+            background-position: 100% 0;
+        }
+
+        to {
+            background-position: 0% 0;
+        }
+    }
+</style>
